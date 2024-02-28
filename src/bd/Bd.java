@@ -4,52 +4,49 @@ import java.sql.*;
 
 public class Bd {
 
-    private String url, username, password;
     private Connection connection;
 
-    public Bd(String url, String username, String password) throws SQLException {
+    public Bd(String url, String username, String password) throws SQLException{
         if (url==null || username==null || password==null) throw new NullPointerException("aucun paramètre ne doit être null");
-        this.url = url;
-        this.username = username;
-        this.password = password;
+
         this.connection = DriverManager.getConnection(url, username, password);
     }
 
-    public Object[] getConnection(String mail, String password) throws SQLException {
-        if (mail==null || password==null) throw new NullPointerException("aucun paramètre ne doit être null");
-
-        String grade = verifLogin(mail, password);
-        if (grade == null) return null;
-        switch (grade){
-            case "gestionnaire":
-                return new Object[]{DriverManager.getConnection(url, username, this.password), grade};
-            case "serveur":
-                return new Object[]{DriverManager.getConnection(url, username, this.password), grade};
-            default:
-                System.out.println("Erreur de grade");
-                return null;
-        }
-    }
-
-
     /**
-     * Vérifie si le login est correct, et retourne le grade de l'utilisateur
-     * @param mail
-     * @param password
-     * @return
+     * Exécute une requête SQL
+     * @param query la requête
+     * @return le résultat de la requête
      * @throws SQLException
      */
-    private String verifLogin(String mail, String password) throws SQLException{
-        String sql = "SELECT * FROM serveur WHERE email = ? AND passwd = ?";
-        PreparedStatement prep = connection.prepareStatement(sql);
-        prep.setString(1, mail);
-        prep.setString(2, password);
-        ResultSet rs = prep.executeQuery();
+    public ResultSet executeQuery(String query) throws SQLException{
+        if (query==null) throw new NullPointerException("la requête ne peut pas être null");
 
-        if (rs.next()){
-            return rs.getString("grade");
-        }
-        return null;
+        Statement statement = this.connection.createStatement();
+        return statement.executeQuery(query);
     }
 
+    /**
+     * Exécute une requête SQL avec des paramètres
+     * @param query la requête
+     * @param params les paramètres
+     * @return le résultat de la requête
+     * @throws SQLException
+     */
+    public ResultSet executeQuery(String query, Object... params) throws SQLException{
+        if (query==null) throw new NullPointerException("la requête ne peut pas être null");
+
+        PreparedStatement statement = this.connection.prepareStatement(query);
+        for (int i = 0; i < params.length; i++) {
+            statement.setObject(i+1, params[i]);
+        }
+
+        // si UPDATE, INSERT ou DELETE
+        if (query.toUpperCase().startsWith("UPDATE") || query.toUpperCase().startsWith("INSERT") || query.toUpperCase().startsWith("DELETE")) {
+            statement.executeUpdate();
+            return null;
+        }
+        else {
+            return statement.executeQuery();
+        }
+    }
 }

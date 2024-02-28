@@ -1,20 +1,13 @@
+import api.Api;
+import app.App;
 import bd.Bd;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
 
-        Bd bd;
-        try{
-            bd = new Bd("jdbc:mysql://172.20.0.2:3306/miaam", "admin", "password");
-        }catch (Exception e){
-            e.printStackTrace();
-            return;
-        }
-
-
-        App app = new App(bd);
-        app.start();
+        App app = new App(new Api("jdbc:mysql://172.17.0.2:3306/miaam", "admin", "password"));
+        app.run();
 
         System.out.println("Fin du programme");
     }
