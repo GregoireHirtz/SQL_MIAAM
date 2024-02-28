@@ -2,7 +2,13 @@ package activeRecord;
 
 import bd.Bd;
 
+import java.sql.Array;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Reservation implements ActiveRecord{
 
@@ -15,11 +21,25 @@ public class Reservation implements ActiveRecord{
     private double montcom;
 
     public Reservation(int numtab, Date datres, int nbpers, Date datpaie, String modpaie, double montcom) {
-        if (numtab < 0 || datres == null || nbpers < 0 || datpaie == null || modpaie == null || montcom < 0) {
+        if (numtab < 0 || datres == null || nbpers < 0) {
             throw new IllegalArgumentException("Les paramètres ne peuvent pas être null");
         }
 
         this.numres = 0;
+        this.numtab = numtab;
+        this.datres = datres;
+        this.nbpers = nbpers;
+        this.datpaie = datpaie;
+        this.modpaie = modpaie;
+        this.montcom = montcom;
+    }
+
+    public Reservation(int numres, int numtab, Date datres, int nbpers, Date datpaie, String modpaie, double montcom){
+        if (numres < 0 || numtab < 0 || datres == null || nbpers < 0) {
+            throw new IllegalArgumentException("Les paramètres ne peuvent pas être null");
+        }
+
+        this.numres = numres;
         this.numtab = numtab;
         this.datres = datres;
         this.nbpers = nbpers;
@@ -49,5 +69,9 @@ public class Reservation implements ActiveRecord{
                 e.printStackTrace();
             }
         }
+    }
+
+    public String toString(){
+        return "Réservation n°" + this.numres + " pour " + this.nbpers + " personnes";
     }
 }

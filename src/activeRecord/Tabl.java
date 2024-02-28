@@ -2,10 +2,23 @@ package activeRecord;
 
 import bd.Bd;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class Tabl implements ActiveRecord {
 
     private int numtab;
     private int nbplace;
+
+    public Tabl(int numtab, int nbplace) {
+        if (nbplace < 0) throw new IllegalArgumentException("Le nombre de place ne peut pas être négatif");
+
+        this.numtab = numtab;
+        this.nbplace = nbplace;
+    }
 
     public Tabl(int nbplace) {
         if (nbplace < 0) throw new IllegalArgumentException("Le nombre de place ne peut pas être négatif");
@@ -35,5 +48,22 @@ public class Tabl implements ActiveRecord {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    public static List<Tabl> getTableLibre(Bd bd, Date date) throws SQLException {
+        if (bd == null) throw new IllegalArgumentException("La connexion ne peut pas être null");
+        if (date == null) throw new IllegalArgumentException("La date ne peut pas être null");
+
+        ResultSet rs = bd.executeQuery("SELECT * FROM tabl WHERE numtab NOT IN (SELECT numtab FROM reservation WHERE DATE_SUB(datres, INTERVAL 2 HOUR) < ? AND ((datpaie IS NULL AND DATE_ADD(datres, INTERVAL 2 HOUR) > ?) OR (datpaie IS NOT NULL AND datpaie > ?)))", date, date, date);
+        ArrayList<Tabl> tables = new ArrayList<>();
+        while (rs.next()){
+            tables.add(new Tabl(rs.getInt("numtab"), rs.getInt("nbplace")));
+        }
+        return tables;
+    }
+
+    public String toString(){
+        return "Table n°" + this.numtab + " (" + this.nbplace + " places)";
     }
 }
