@@ -52,6 +52,11 @@ public class Commande implements ActiveRecord{
         this.quantite = quantite;
     }
 
+
+
+
+
+
     public static Commande findByNums(Bd bd, int numres, int numplat) {
         if (bd == null) throw new IllegalArgumentException("La connexion ne peut pas être null");
 

@@ -161,7 +161,12 @@ public class MenuAccueilGestion extends Menu {
                 return;
             }
 
+            app.bd.execute("LOCK TABLES reservation WRITE, commande WRITE, plat WRITE");
+            app.bd.setAutoCommit(false);
+            app.bd.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+
             // verifier si la reservation est deja payee
+            System.out.println(reservation.getDatpaie());
             if (reservation.getDatpaie() != null) {
                 System.out.println("Réservation déjà payée");
                 return;
@@ -171,6 +176,32 @@ public class MenuAccueilGestion extends Menu {
             reservation.calculMontant(app.bd);
             System.out.println(reservation);
 
+            // demander mode de paiement
+            String mode = saisieString("Mode de paiement (1. Espece, 2. Cheque, 3. Carte): ");
+            if (!mode.equals("1") && !mode.equals("2") && !mode.equals("3")) {
+                System.out.println("Mode de paiement invalide");
+                return;
+            }
+            switch (mode) {
+                case "1":
+                    reservation.setModepaie("Espèces");
+                    break;
+                case "2":
+                    reservation.setModepaie("Chèque");
+                    break;
+                case "3":
+                    reservation.setModepaie("Carte");
+                    break;
+            }
+
+            // mettre a jour la date de paiement
+            reservation.setDatpaie(new Date());
+
+            // sauvegarder les modifications
+            reservation.save(app.bd);
+            app.bd.commit();
+
+            System.out.println("Paiement effectué");
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -63,6 +63,17 @@ public class Serveur implements ActiveRecord{
         }
     }
 
+    public String toString(){
+        return "Serveur " + this.numserv + " : " + this.nomserv + " (" + this.grade + ")";
+    }
+
+    public String getGrade() {
+        return this.grade;
+    }
+
+
+
+
 
     public static Serveur getByEmail(Bd bd, String email) {
         if (email == null) throw new IllegalArgumentException("L'email ne peut pas être null");
@@ -107,13 +118,5 @@ public class Serveur implements ActiveRecord{
             e.printStackTrace();
         }
         return null;
-    }
-
-    public String toString(){
-        return "Serveur " + this.numserv + " : " + this.nomserv + " (" + this.grade + ")";
-    }
-
-    public String getGrade() {
-        return this.grade;
     }
 }

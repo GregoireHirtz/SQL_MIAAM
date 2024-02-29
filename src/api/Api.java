@@ -21,7 +21,7 @@ public class Api {
     }
 
     /**
-     * renvoie l'id du serveur si le compte existe, -1 sinon
+     * Recupere la base de donnee correspondant a l'email et au mot de passe
      * @param email
      * @param password
      */

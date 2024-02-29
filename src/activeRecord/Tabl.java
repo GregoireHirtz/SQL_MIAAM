@@ -50,6 +50,18 @@ public class Tabl implements ActiveRecord {
         }
     }
 
+    public String toString(){
+        return "Table n°" + this.numtab + " (" + this.nbplace + " places)";
+    }
+
+    public int getNbplace() {
+        return nbplace;
+    }
+
+
+
+
+
     public static Tabl findByNum(Bd bd, int numtab) throws SQLException {
         if (bd == null) throw new IllegalArgumentException("La connexion ne peut pas être null");
 
@@ -81,13 +93,5 @@ public class Tabl implements ActiveRecord {
             tables.add(new Tabl(rs.getInt("numtab"), rs.getInt("nbplace")));
         }
         return tables;
-    }
-
-    public String toString(){
-        return "Table n°" + this.numtab + " (" + this.nbplace + " places)";
-    }
-
-    public int getNbplace() {
-        return nbplace;
     }
 }

@@ -71,26 +71,11 @@ public class Reservation implements ActiveRecord{
         }
     }
 
-    public static Reservation findByNum(Bd bd, int numres){
-        if (bd == null) throw new IllegalArgumentException("La connexion ne peut pas être null");
-
-        String sql = "SELECT * FROM reservation WHERE numres = ?";
-        try{
-            ResultSet rs = bd.executeQuery(sql, numres);
-            if (rs.next()){
-                return new Reservation(rs.getInt("numres"), rs.getInt("numtab"), rs.getDate("datres"), rs.getInt("nbpers"), rs.getDate("datpaie"), rs.getString("modpaie"), rs.getDouble("montcom"));
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public void calculMontant(Bd bd){
         if (this.numres == 0) throw new IllegalArgumentException("La réservation n'existe pas");
 
         try{
-            ResultSet rs = bd.executeQuery("SELECT SUM(c.quantite*p.prixunit) FROM reservation r LEFT JOIN commande c ON r.numres=c.numres LEFT JOIN plat p ON c.numplat=p.numplat WHERE r.numres = ?", this.numres);
+            ResultSet rs = bd.executeQuery("SELECT SUM(commande.quantite*plat.prixunit) FROM reservation LEFT JOIN commande ON reservation.numres=commande.numres LEFT JOIN plat ON commande.numplat=plat.numplat WHERE reservation.numres = ?", this.numres);
             if (rs.next()){
                 this.montcom = rs.getDouble(1);
             }
@@ -113,5 +98,30 @@ public class Reservation implements ActiveRecord{
 
     public String toString(){
         return "Réservation n°" + this.numres + " pour " + this.nbpers + " personnes" + " à la table n°" + this.numtab + " le " + this.datres + " pour un montant de " + this.montcom + "€";
+    }
+
+    public void setDatpaie(Date datpaie) {
+        this.datpaie = datpaie;
+    }
+    public void setModepaie(String modpaie) {
+        this.modpaie = modpaie;
+    }
+
+
+
+
+    public static Reservation findByNum(Bd bd, int numres){
+        if (bd == null) throw new IllegalArgumentException("La connexion ne peut pas être null");
+
+        String sql = "SELECT * FROM reservation WHERE numres = ?";
+        try{
+            ResultSet rs = bd.executeQuery(sql, numres);
+            if (rs.next()){
+                return new Reservation(rs.getInt("numres"), rs.getInt("numtab"), rs.getDate("datres"), rs.getInt("nbpers"), rs.getDate("datpaie"), rs.getString("modpaie"), rs.getDouble("montcom"));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

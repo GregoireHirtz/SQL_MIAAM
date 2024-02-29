@@ -36,6 +36,19 @@ public class Affecter implements ActiveRecord{
         }
     }
 
+    public String toString(){
+        String str = "Table: " + this.numtab;
+        str += "\nDate: " + this.dataff;
+        str += "\nServeur: " + this.numserv;
+        str += "\n";
+        return str;
+    }
+
+
+
+
+
+
     public static List<Affecter> getAll(Bd bd){
         if (bd == null) throw new IllegalArgumentException("La connexion ne peut pas être null");
 
@@ -65,13 +78,5 @@ public class Affecter implements ActiveRecord{
             e.printStackTrace();
         }
         return null;
-    }
-
-    public String toString(){
-        String str = "Table: " + this.numtab;
-        str += "\nDate: " + this.dataff;
-        str += "\nServeur: " + this.numserv;
-        str += "\n";
-        return str;
     }
 }

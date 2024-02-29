@@ -4,6 +4,9 @@ import api.Api;
 import app.menu.*;
 import bd.Bd;
 
+/**
+ * Classe principale de l'application
+ */
 public class App {
 
     public int menu = 1;
@@ -15,7 +18,9 @@ public class App {
         this.api = api;
     }
 
-
+    /**
+     * Méthode principale de l'application
+     */
     public void run(){
         while (running){
             switch (menu){

@@ -64,16 +64,6 @@ public class Plat implements ActiveRecord{
         }
     }
 
-    public static List<Plat> getAll(Bd bd) throws SQLException {
-        if (bd == null) throw new IllegalArgumentException("La connexion ne peut pas être null");
-        ArrayList<Plat> plats = new ArrayList<>();
-        ResultSet rs = bd.executeQuery("SELECT * FROM plat");
-        while (rs.next()) {
-            plats.add(new Plat(rs.getInt("numplat"), rs.getString("libelle"), rs.getString("type"), rs.getDouble("prixunit"), rs.getInt("qteservie")));
-        }
-        return plats;
-    }
-
     public String toString(){
         return "- ["+this.numplat+"] " +this.libelle + " (" + this.type + ") - " + this.prixunit + "€" + " - " + this.qtservie + " restants";
     }
@@ -86,6 +76,10 @@ public class Plat implements ActiveRecord{
         this.qtservie = qtservie;
     }
 
+
+
+
+
     public static Plat findByNum(Bd bd, int numplat) throws SQLException {
         if (bd == null) throw new IllegalArgumentException("La connexion ne peut pas être null");
 
@@ -94,5 +88,15 @@ public class Plat implements ActiveRecord{
             return new Plat(rs.getInt("numplat"), rs.getString("libelle"), rs.getString("type"), rs.getDouble("prixunit"), rs.getInt("qteservie"));
         }
         return null;
+    }
+
+    public static List<Plat> getAll(Bd bd) throws SQLException {
+        if (bd == null) throw new IllegalArgumentException("La connexion ne peut pas être null");
+        ArrayList<Plat> plats = new ArrayList<>();
+        ResultSet rs = bd.executeQuery("SELECT * FROM plat");
+        while (rs.next()) {
+            plats.add(new Plat(rs.getInt("numplat"), rs.getString("libelle"), rs.getString("type"), rs.getDouble("prixunit"), rs.getInt("qteservie")));
+        }
+        return plats;
     }
 }
