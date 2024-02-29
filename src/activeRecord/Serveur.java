@@ -2,8 +2,11 @@ package activeRecord;
 
 import bd.Bd;
 
+import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Serveur implements ActiveRecord{
 
@@ -74,6 +77,40 @@ public class Serveur implements ActiveRecord{
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static List<Serveur> getAll(Bd bd){
+        if (bd == null) throw new IllegalArgumentException("La connexion ne peut pas être null");
+
+        try{
+            ResultSet rs = bd.executeQuery("SELECT * FROM serveur");
+            ArrayList<Serveur> serveurs = new ArrayList<>();
+            while (rs.next()){
+                serveurs.add(new Serveur(rs.getInt("numserv"), rs.getString("email"), rs.getString("passwd"), rs.getString("nomserv"), rs.getString("grade")));
+            }
+            return serveurs;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Serveur findByNum(Bd bd, int numserv){
+        if (bd == null) throw new IllegalArgumentException("La connexion ne peut pas être null");
+
+        try{
+            ResultSet rs = bd.executeQuery("SELECT * FROM serveur WHERE numserv = ?", numserv);
+            if (rs.next()){
+                return new Serveur(rs.getInt("numserv"), rs.getString("email"), rs.getString("passwd"), rs.getString("nomserv"), rs.getString("grade"));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String toString(){
+        return "Serveur " + this.numserv + " : " + this.nomserv + " (" + this.grade + ")";
     }
 
     public String getGrade() {

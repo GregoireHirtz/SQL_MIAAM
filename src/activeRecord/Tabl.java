@@ -72,6 +72,17 @@ public class Tabl implements ActiveRecord {
         return tables;
     }
 
+    public static List<Tabl> getAll(Bd bd) throws SQLException {
+        if (bd == null) throw new IllegalArgumentException("La connexion ne peut pas être null");
+
+        ResultSet rs = bd.executeQuery("SELECT * FROM tabl");
+        ArrayList<Tabl> tables = new ArrayList<>();
+        while (rs.next()){
+            tables.add(new Tabl(rs.getInt("numtab"), rs.getInt("nbplace")));
+        }
+        return tables;
+    }
+
     public String toString(){
         return "Table n°" + this.numtab + " (" + this.nbplace + " places)";
     }

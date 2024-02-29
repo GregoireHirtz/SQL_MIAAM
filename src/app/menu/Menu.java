@@ -22,7 +22,11 @@ public class Menu {
 
     private Scanner sc = new Scanner(System.in);
 
-
+    /**
+     * Affiche un message et demande à l'utilisateur de saisir un entier
+     * @param message
+     * @return
+     */
     public int saisieInt(String message){
         System.out.print(message);
         try{
@@ -33,12 +37,20 @@ public class Menu {
 
     }
 
+    /**
+     * Affiche un message et demande à l'utilisateur de saisir une chaine de caractères
+     * @param message
+     * @return
+     */
     public String saisieString(String message){
         System.out.print(message);
         return sc.next();
     }
 
-
+    /**
+     * Liste les tables libre à une date saisie par l'utilisateur
+     * @param app
+     */
     protected void listerTablesLibres(App app){
         System.out.println("Liste des tables libres");
 
@@ -65,6 +77,10 @@ public class Menu {
         }
     }
 
+    /**
+     * Permet de réserver une table à une date et heure saisie par l'utilisateur
+     * @param app
+     */
     protected void reserverTable(App app){
 
         System.out.println("Réservation d'une table");
@@ -125,6 +141,10 @@ public class Menu {
 
     }
 
+    /**
+     * Liste les plats disponibles
+     * @param app
+     */
     protected void listerPlatsDispo(App app){
         System.out.println("Liste des plats disponibles");
         try{
@@ -139,6 +159,10 @@ public class Menu {
         }
     }
 
+    /**
+     * Permet de commander des plats pour une réservation
+     * @param app
+     */
     protected void commanderPlats(App app){
         try{
             app.bd.execute("LOCK TABLE plat WRITE, commande WRITE, reservation WRITE");

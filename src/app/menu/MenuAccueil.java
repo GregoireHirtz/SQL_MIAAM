@@ -15,6 +15,10 @@ import java.util.List;
 
 public class MenuAccueil extends Menu {
 
+    /**
+     * Liste les tables libres
+     * @param app
+     */
     public void run(App app){
         System.out.println("Menu initial");
         System.out.println("1. Lister tables libres");

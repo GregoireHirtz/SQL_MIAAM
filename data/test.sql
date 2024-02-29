@@ -22,3 +22,7 @@ WHERE numtab NOT IN
 
 
 
+SELECT SUM(c.quantite*p.prixunit) FROM reservation r
+LEFT JOIN commande c ON r.numres=c.numres
+LEFT JOIN plat p ON c.numplat=p.numplat
+WHERE r.numres = ?;

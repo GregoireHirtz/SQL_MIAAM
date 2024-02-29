@@ -86,6 +86,19 @@ public class Reservation implements ActiveRecord{
         return null;
     }
 
+    public void calculMontant(Bd bd){
+        if (this.numres == 0) throw new IllegalArgumentException("La réservation n'existe pas");
+
+        try{
+            ResultSet rs = bd.executeQuery("SELECT SUM(c.quantite*p.prixunit) FROM reservation r LEFT JOIN commande c ON r.numres=c.numres LEFT JOIN plat p ON c.numplat=p.numplat WHERE r.numres = ?", this.numres);
+            if (rs.next()){
+                this.montcom = rs.getDouble(1);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Date  getDatpaie() {
         return datpaie;
     }
@@ -94,7 +107,11 @@ public class Reservation implements ActiveRecord{
         return numres;
     }
 
+    public int getNumtab() {
+        return numtab;
+    }
+
     public String toString(){
-        return "Réservation n°" + this.numres + " pour " + this.nbpers + " personnes";
+        return "Réservation n°" + this.numres + " pour " + this.nbpers + " personnes" + " à la table n°" + this.numtab + " le " + this.datres + " pour un montant de " + this.montcom + "€";
     }
 }
