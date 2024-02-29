@@ -22,7 +22,15 @@ public class Bd {
         if (query==null) throw new NullPointerException("la requête ne peut pas être null");
 
         Statement statement = this.connection.createStatement();
-        return statement.executeQuery(query);
+        ResultSet rs = statement.executeQuery(query);
+        return rs;
+    }
+
+    public void execute(String query) throws SQLException{
+        if (query==null) throw new NullPointerException("la requête ne peut pas être null");
+
+        Statement statement = this.connection.createStatement();
+        statement.execute(query);
     }
 
     /**
@@ -40,13 +48,33 @@ public class Bd {
             statement.setObject(i+1, params[i]);
         }
 
-        // si UPDATE, INSERT ou DELETE
-        if (query.toUpperCase().startsWith("UPDATE") || query.toUpperCase().startsWith("INSERT") || query.toUpperCase().startsWith("DELETE")) {
+        // si UPDATE, INSERT, DELETE, LOCK, UNLOCK
+        if (query.toUpperCase().startsWith("UPDATE") || query.toUpperCase().startsWith("INSERT") || query.toUpperCase().startsWith("DELETE") || query.toUpperCase().startsWith("LOCK") || query.toUpperCase().startsWith("UNLOCK")){
             statement.executeUpdate();
             return null;
         }
         else {
-            return statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
+            return rs;
+        }
+    }
+
+    public void setAutoCommit(boolean autoCommit) throws SQLException{
+        this.connection.setAutoCommit(autoCommit);
+    }
+
+    public void setTransactionIsolation(int level) throws SQLException{
+        this.connection.setTransactionIsolation(level);
+    }
+
+    public void commit() throws SQLException{
+        this.connection.commit();
+    }
+
+    public void rollback(){
+        try{
+            this.connection.rollback();
+        }catch (SQLException e){
         }
     }
 }

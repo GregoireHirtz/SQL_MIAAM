@@ -4,7 +4,6 @@ import app.App;
 
 public class MenuInitial extends Menu {
 
-    @Override
     public void run(App app){
         System.out.println("Menu initial");
         System.out.println("1. Connexion");

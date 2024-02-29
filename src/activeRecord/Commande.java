@@ -2,6 +2,8 @@ package activeRecord;
 
 import bd.Bd;
 
+import java.sql.ResultSet;
+
 public class Commande implements ActiveRecord{
 
     private int numres;
@@ -22,11 +24,46 @@ public class Commande implements ActiveRecord{
     public void save(Bd bd) {
         if (bd == null) throw new IllegalArgumentException("La connexion ne peut pas être null");
 
-        String sql = "INSERT INTO commande (numres, numplat, quantite) VALUES (?, ?, ?)";
-        try{
-            bd.executeQuery(sql, this.numres, this.numplat, this.quantite);
-        }catch (Exception e){
+        Commande commande = Commande.findByNums(bd, this.numres, this.numplat);
+
+        // si nouvelle commande alors on l'ajoute
+        if (commande == null){
+            String sql = "INSERT INTO commande (numres, numplat, quantite) VALUES (?, ?, ?)";
+            try{
+                bd.executeQuery(sql, this.numres, this.numplat, this.quantite);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }else{
+            String sql = "UPDATE commande SET quantite = ? WHERE numres = ? AND numplat = ?";
+            try{
+                bd.executeQuery(sql, this.quantite, this.numres, this.numplat);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public int getQuantite() {
+        return quantite;
+    }
+
+    public void setQuantite(int quantite) {
+        this.quantite = quantite;
+    }
+
+    public static Commande findByNums(Bd bd, int numres, int numplat) {
+        if (bd == null) throw new IllegalArgumentException("La connexion ne peut pas être null");
+
+        String sql = "SELECT * FROM commande WHERE numres = ? AND numplat = ?";
+        try {
+            ResultSet rs = bd.executeQuery(sql, numres, numplat);
+            if (rs.next()) {
+                return new Commande(rs.getInt("numres"), rs.getInt("numplat"), rs.getInt("quantite"));
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 }

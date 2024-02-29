@@ -28,6 +28,9 @@ public class App {
                 case 2:
                     new MenuAccueil().run(this);
                     break;
+                case 3:
+                    new MenuAccueilGestion().run(this);
+                    break;
                 default:
                     menu = 0;
             }

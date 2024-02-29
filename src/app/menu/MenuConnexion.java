@@ -6,7 +6,6 @@ import bd.Bd;
 
 public class MenuConnexion extends Menu {
 
-    @Override
     public void run(App app){
         System.out.println("Menu connexion");
         //String email = saisieString("Email: ");
@@ -17,10 +16,16 @@ public class MenuConnexion extends Menu {
         app.bd = app.api.getBd(email, mdp);
 
         if (app.bd != null){
-            app.menu = MENU_ACCUEIL;
+            Serveur serveur = Serveur.getByEmail(app.bd, email);
+            if (serveur.getGrade().compareTo("gestionnaire") == 0){
+                app.menu = MENU_ACCUEIL_GESTION;
+            } else {
+                app.menu = MENU_ACCUEIL;
+            }
         } else {
             app.menu = MENU_INITIAL;
         }
+        System.out.println("Menu: " + app.menu);
     }
 
 }

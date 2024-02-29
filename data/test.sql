@@ -20,3 +20,5 @@ WHERE numtab NOT IN
           ((datpaie IS NULL AND DATE_ADD(datres, INTERVAL 2 HOUR) > @datetime)
             OR (datpaie IS NOT NULL AND datpaie > @datetime)));
 
+
+

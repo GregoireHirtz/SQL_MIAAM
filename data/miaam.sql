@@ -1,8 +1,10 @@
+SET AUTOCOMMIT = 1;
+
+DROP TABLE IF EXISTS commande;
+DROP TABLE IF EXISTS reservation;
 DROP TABLE IF EXISTS tabl;
 DROP TABLE IF EXISTS affecter;
-DROP TABLE IF EXISTS commande;
 DROP TABLE IF EXISTS plat;
-DROP TABLE IF EXISTS reservation;
 DROP TABLE IF EXISTS serveur;
 
 
@@ -71,11 +73,11 @@ CREATE TABLE serveur (
 -- Tuples de Serveur
 INSERT INTO serveur (email, passwd, nomserv, grade)
 VALUES
-    ('user1@mail.com', '$#;��m$$$$$0', 'Tutus Peter', 'gestionnaire'),
-    ('user2@mail.com', '$xy#;��m$$$$$1', 'Lilo Vito', 'serveur'),
-    ('user3@mail.com', '$ab#;��m$$$$$2', 'Don Carl', 'serveur'),
-    ('user4@mail.com', '$cd#;��m$$$$$3', 'Leo Jon', 'serveur'),
-    ('user5@mail.com', '$mm#;��m$$$$$4', 'Dean Geak', 'gestionnaire');
+    ('user1@mail.com', 'password', 'Tutus Peter', 'gestionnaire'),
+    ('user2@mail.com', 'password', 'Lilo Vito', 'serveur'),
+    ('user3@mail.com', 'password', 'Don Carl', 'serveur'),
+    ('user4@mail.com', 'password', 'Leo Jon', 'serveur'),
+    ('user5@mail.com', 'password', 'Dean Geak', 'gestionnaire');
 
 -- Table reservation
 CREATE TABLE reservation (

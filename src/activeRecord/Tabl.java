@@ -50,6 +50,15 @@ public class Tabl implements ActiveRecord {
         }
     }
 
+    public static Tabl findByNum(Bd bd, int numtab) throws SQLException {
+        if (bd == null) throw new IllegalArgumentException("La connexion ne peut pas être null");
+
+        ResultSet rs = bd.executeQuery("SELECT * FROM tabl WHERE numtab = ?", numtab);
+        if (rs.next()){
+            return new Tabl(rs.getInt("numtab"), rs.getInt("nbplace"));
+        }
+        return null;
+    }
 
     public static List<Tabl> getTableLibre(Bd bd, Date date) throws SQLException {
         if (bd == null) throw new IllegalArgumentException("La connexion ne peut pas être null");
@@ -65,5 +74,9 @@ public class Tabl implements ActiveRecord {
 
     public String toString(){
         return "Table n°" + this.numtab + " (" + this.nbplace + " places)";
+    }
+
+    public int getNbplace() {
+        return nbplace;
     }
 }

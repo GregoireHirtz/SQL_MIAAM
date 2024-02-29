@@ -1,6 +1,8 @@
 package activeRecord;
 
 import bd.Bd;
+
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Serveur implements ActiveRecord{
@@ -17,6 +19,17 @@ public class Serveur implements ActiveRecord{
             throw new IllegalArgumentException("Les paramètres ne peuvent pas être null");
         }
         this.numserv = 0;
+        this.email = email;
+        this.passwd = passwd;
+        this.nomserv = nomserv;
+        this.grade = grade;
+    }
+
+    public Serveur(int numserv, String email, String passwd, String nomserv, String grade) {
+        if (email == null || passwd == null || nomserv == null || grade == null) {
+            throw new IllegalArgumentException("Les paramètres ne peuvent pas être null");
+        }
+        this.numserv = numserv;
         this.email = email;
         this.passwd = passwd;
         this.nomserv = nomserv;
@@ -47,13 +60,23 @@ public class Serveur implements ActiveRecord{
         }
     }
 
-    public static Serveur findByNum(Bd bd, int num) throws SQLException {
-        if (num <= 0) throw new IllegalArgumentException("Le numéro de serveur doit être positif");
 
+    public static Serveur getByEmail(Bd bd, String email) {
+        if (email == null) throw new IllegalArgumentException("L'email ne peut pas être null");
 
-        String sql = "SELECT * FROM serveur WHERE numserv = ?";
-
-
+        String sql = "SELECT * FROM serveur WHERE email = ?";
+        try{
+            ResultSet rs = bd.executeQuery(sql, email);
+            if (rs.next()){
+                return new Serveur(rs.getInt("numserv"), rs.getString("email"), rs.getString("passwd"), rs.getString("nomserv"), rs.getString("grade"));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
         return null;
+    }
+
+    public String getGrade() {
+        return this.grade;
     }
 }

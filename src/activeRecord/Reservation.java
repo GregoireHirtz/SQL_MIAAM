@@ -18,9 +18,9 @@ public class Reservation implements ActiveRecord{
     private int nbpers;
     private Date datpaie;
     private String modpaie;
-    private double montcom;
+    private Double montcom;
 
-    public Reservation(int numtab, Date datres, int nbpers, Date datpaie, String modpaie, double montcom) {
+    public Reservation(int numtab, Date datres, int nbpers) {
         if (numtab < 0 || datres == null || nbpers < 0) {
             throw new IllegalArgumentException("Les paramètres ne peuvent pas être null");
         }
@@ -29,9 +29,9 @@ public class Reservation implements ActiveRecord{
         this.numtab = numtab;
         this.datres = datres;
         this.nbpers = nbpers;
-        this.datpaie = datpaie;
-        this.modpaie = modpaie;
-        this.montcom = montcom;
+        this.datpaie = null;
+        this.modpaie = null;
+        this.montcom = null;
     }
 
     public Reservation(int numres, int numtab, Date datres, int nbpers, Date datpaie, String modpaie, double montcom){
@@ -69,6 +69,29 @@ public class Reservation implements ActiveRecord{
                 e.printStackTrace();
             }
         }
+    }
+
+    public static Reservation findByNum(Bd bd, int numres){
+        if (bd == null) throw new IllegalArgumentException("La connexion ne peut pas être null");
+
+        String sql = "SELECT * FROM reservation WHERE numres = ?";
+        try{
+            ResultSet rs = bd.executeQuery(sql, numres);
+            if (rs.next()){
+                return new Reservation(rs.getInt("numres"), rs.getInt("numtab"), rs.getDate("datres"), rs.getInt("nbpers"), rs.getDate("datpaie"), rs.getString("modpaie"), rs.getDouble("montcom"));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Date  getDatpaie() {
+        return datpaie;
+    }
+
+    public int getNumres() {
+        return numres;
     }
 
     public String toString(){
